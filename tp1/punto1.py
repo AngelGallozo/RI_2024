@@ -8,7 +8,7 @@ import re
 from unidecode import unidecode
 
 # vars
-min_len_tokens = 4
+min_len_tokens = 2
 max_len_tokens = 50
 list_terms={}
 # Datos de documento más largo y corto [id_archivo,cant_tokens,cant_terminos]
@@ -32,7 +32,6 @@ def getStopWords(filepath):
     return stopwords
 
 # Pasa a minusculas y elimina acentos
-# Extra: Si el token es un numero lo imprime por consola
 def normalize(token):
     new_token = unidecode(token)
     return new_token.lower()
