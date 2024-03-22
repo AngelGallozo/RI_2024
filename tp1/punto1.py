@@ -160,6 +160,7 @@ def main():
                             term = normalize(token)
                             term_long_acept = (term != '') #Termino aceptable luego de Normalizacion?
                             if term_long_acept:
+                                termsCounter_forfile +=1 # Aumento cantidad de terminos encontrados para este archivo
                                 if term in list_terms: # Si el termino existe en la lista de terminos
 
                                     if file_index in list_terms[term]: # Si el termino ya tiene frecuencia en ese archivo(file_index)
@@ -171,7 +172,6 @@ def main():
                                     list_terms[term]={} # Se inicializa dic del nuevo termino
                                     list_terms[term][file_index] = 1 # Se inicializa la frecuencia del termino en ese archivo(file_index) 
                                     termsCounter+=1 # Aumento cantidad de terminos encontrados
-                                    termsCounter_forfile +=1 # Aumento cantidad de terminos encontrados para este archivo
                                     acum_long_term+= len(term)
             
             # Verificacion y guardado de archivo más corto y más largo.

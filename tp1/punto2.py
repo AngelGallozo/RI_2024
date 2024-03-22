@@ -27,57 +27,56 @@ top_low_frec=[]
 
 # Expresiones Regulares
 regex_alpha_words = re.compile(r'[^a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ]') # Cadenas alfanumericas
-regex_abrev_1 = re.compile(r'(?:\b[A-Z]\.)+(?:[A-Z]\.{,1})+') # Abreviaturas como: C.I.A. , N.A.S.A.
-regex_abrev_2 = re.compile(r'(?:^|\s)([A-Za-z]{1,3}\.)(?=\s|\.|$)') # Abreviaturas como: Dir. lic. Lic. Sr.
-regex_abrev_3 = re.compile(r'([A-Z][A-Za-z]\.[A-Z][A-Za-z]\.)+') # # Abreviaturas como: EE.UU.
-regex_abrev_4 = re.compile(r'([A-Za-z]{2}\.[A-Za-z]{2})+') # # Abreviaturas como: ee.UU
-regex_abrev_5 = re.compile(r'\b[a-z]{2,4}\.') # Abreviaturas como: dir. lic. lic. sr. dr.
-
-
-#Expresiones Regulares - Cantidades y Telefonos
-#Expresiones Regulares - Cantidades y Telefonos
-regex_date_all=[
-    '[0-9]{4}\-[0][1-9]\-[0-3][0-9]', # 2021-09-20
-    '[0-9]{4}\-[1][0-2]\-[0-3][0-9]', # 2021-12-20 
-    '[1][0-2]\-[0-9]{2}\-[0-9]{4}', # 12-20-2021 
-    '[0][1-9]\-[0-9]{2}\-[0-9]{4}', # 09-20-2021
-    '[0-9]{2}\-[1][0-2]\-[0-9]{4}', # dd-mm-aaaa 
-
-    '[0-9]{4}\/[0][1-9]\/[0-3][0-9]', # 2021/09/20
-    '[0-9]{4}\/[1][0-2]\/[0-3][0-9]', # 2021/12/20
-    '[1][0-2]\/[0-9]{2}\/[0-9]{4}', # 12/20/2021
-    '[0][1-9]\/[0-9]{2}\/[0-9]{4}', # 09/20/2021
-    '[0-9]{2}\/[1][0-2]\/[0-9]{4}', # dd/mm/aaaa 
-
-    '[0-9]{4}\.[0][1-9]\.[0-3][0-9]', # 2021.09.20
-    '[0-9]{4}\.[1][0-2]\.[0-3][0-9]', # 2021.12.20
-    '[1][0-2]\.[0-9]{2}\.[0-9]{4}', # 12.20.2021
-    '[0][1-9]\.[0-9]{2}\.[0-9]{4}', # 09.20.2021
-    '[0-9]{2}\.[1][0-2]\.[0-9]{4}', # dd.mm.aaaa 
+# Abreviaturas
+regex_abrevs=[
+    r'(?:\b[A-Z]\.)+(?:[A-Z]\.{,1})+', # Abreviaturas como: C.I.A. , N.A.S.A.
+    r'(?:^|\s)([A-Za-z]{1,3}\.)(?=\s|\.|$)', # Abreviaturas como: Dir. lic. Lic. Sr.
+    r'([A-Z][A-Za-z]\.[A-Z][A-Za-z]\.)+',  # Abreviaturas como: EE.UU.
+    r'([A-Za-z]{2}\.[A-Za-z]{2})+',  # Abreviaturas como: ee.UU
+    r'\b[a-z]{2,4}\.', # Abreviaturas como: dir. lic. lic. sr. dr.
 ]
 
-regex_tel_1 = re.compile(r'^\+\d{10,13}\b') # Coincidir con números de teléfono como: +541122334455
-regex_tel_2 = re.compile(r'^0{0,1}\d{2}-\d{8}\b') # Coincidir con números de teléfono como: 011-22334455 o 11-22334455
-regex_tel_3 = re.compile(r'\b\d{2,3}-\d{2,3}-\d{5,}(?:-\d{3})?\b') # Coincidir con números de teléfono como: 022-333-55555 o 11-22-333-334
+#Expresiones Regulares - Cantidades y Telefonos
+regex_cants=[
+    # fechas
+    r'[0-9]{4}\-[0][1-9]\-[0-3][0-9]', # 2021-09-20
+    r'[0-9]{4}\-[1][0-2]\-[0-3][0-9]', # 2021-12-20 
+    r'[1][0-2]\-[0-9]{2}\-[0-9]{4}', # 12-20-2021 
+    r'[0][1-9]\-[0-9]{2}\-[0-9]{4}', # 09-20-2021
+    r'[0-9]{2}\-[1][0-2]\-[0-9]{4}', # dd-mm-aaaa 
 
-regex_ints = re.compile(r'\b-?\d+\b')  # Coincidir con números enteros positivos y negativos
-regex_floats_point = re.compile(r'-?\b\d+\.\d+\b')  # Coincidir con números reales con punto positivos y negativos
-regex_floats_coma = re.compile(r'-?\b\d+,\d+\b')  # Coincidir con números reales con coma positivos y negativos
-regex_tel_1 = re.compile(r'^\+\d{10,13}\b') # Coincidir con números de teléfono como: +541122334455
-regex_tel_2 = re.compile(r'^0{0,1}\d{2}-\d{8}\b') # Coincidir con números de teléfono como: 011-22334455 o 11-22334455
-regex_tel_3 = re.compile(r'\b\d{2,3}-\d{2,3}-\d{5,}(?:-\d{3})?\b') # Coincidir con números de teléfono como: 022-333-55555 o 11-22-333-334
+    r'[0-9]{4}\/[0][1-9]\/[0-3][0-9]', # 2021/09/20
+    r'[0-9]{4}\/[1][0-2]\/[0-3][0-9]', # 2021/12/20
+    r'[1][0-2]\/[0-9]{2}\/[0-9]{4}', # 12/20/2021
+    r'[0][1-9]\/[0-9]{2}\/[0-9]{4}', # 09/20/2021
+    r'[0-9]{2}\/[1][0-2]\/[0-9]{4}', # dd/mm/aaaa 
 
-regex_ints = re.compile(r'\b-?\d+\b')  # Coincidir con números enteros positivos y negativos
-regex_floats_point = re.compile(r'-?\b\d+\.\d+\b')  # Coincidir con números reales con punto positivos y negativos
-regex_floats_coma = re.compile(r'-?\b\d+,\d+\b')  # Coincidir con números reales con coma positivos y negativos
+    r'[0-9]{4}\.[0][1-9]\.[0-3][0-9]', # 2021.09.20
+    r'[0-9]{4}\.[1][0-2]\.[0-3][0-9]', # 2021.12.20
+    r'[1][0-2]\.[0-9]{2}\.[0-9]{4}', # 12.20.2021
+    r'[0][1-9]\.[0-9]{2}\.[0-9]{4}', # 09.20.2021
+    r'[0-9]{2}\.[1][0-2]\.[0-9]{4}', # dd.mm.aaaa 
+
+    # telefonos
+    r'^\+\d{10,13}\b', # Coincidir con números de teléfono como: +541122334455
+    r'^0{0,1}\d{2}-\d{8}\b', # Coincidir con números de teléfono como: 011-22334455 o 11-22334455
+    r'\b\d{2,3}-\d{2,3}-\d{5,}(?:-\d{3})?\b', # Coincidir con números de teléfono como: 022-333-55555 o 11-22-333-334
+    
+    # Numeros
+    r'\b-?\d+\b',  # Coincidir con números enteros positivos y negativos
+    r'-?\b\d+\.\d+\b',  # Coincidir con números reales con punto positivos y negativos
+    r'-?\b\d+,\d+\b',  # Coincidir con números reales con coma positivos y negativos
+]
+
+# Expresiones Regulares- URLs y emails
+regex_urls=[
+    r'http[s]?://(?:[A-Za-z]|[0-9]|[+_@$-.&]|[*,!/:?=#\(\)])+', # URLs como: http o https
+    r'^www\.[A-Za-z0-9_-]+(?:\.[A-Za-z]{2,})+$', # URL como: www. ejemplo.com.ar 
+    r'ftp://(?:[A-Za-z]|[0-9]|[+_@$-.&]|[*,!/:?=#\(\)])+', # URL como: ftp://unlu.edu.ar
+]
 
 
-# Expresiones Regulares- URLs
-regex_url_1 = re.compile(r'http[s]?://(?:[A-Za-z]|[0-9]|[+_@$-.&]|[*,!/:?=#\(\)])+') # URLs como: http o https
-regex_url_2 = re.compile(r'^www\.[A-Za-z0-9_-]+(?:\.[A-Za-z]{2,})+$') # URL como: www. ejemplo.com.ar 
-regex_url_3 = re.compile(r'ftp://(?:[A-Za-z]|[0-9]|[+_@$-.&]|[*,!/:?=#\(\)])+') # URL como: ftp://unlu.edu.ar
-
-regex_emails = re.compile(r'\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}\b') #Correos electronicos
+regex_emails = re.compile(r'\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}\b') 
 
 
 # Expresiones Regulares- Nombre Propios
@@ -123,34 +122,18 @@ def proc_nombres_propios(line,result):
 #Proceso URLs y emails
 #Proceso URLs y emails
 def proc_urls_emails(line,result):
-    global regex_url_1
-    global regex_url_2
     global regex_emails
+    global regex_urls
 
-    results_urls1 = regex_url_1.findall(line)
-    results_urls2 = regex_url_2.findall(line)
-    results_urls3 = regex_url_3.findall(line)
-
-    if len(results_urls1)>0:
-        #Almaceno en lista separada para urls
-        result = result + results_urls1
-        for res_url1 in results_urls1:
-            insert_in_list(res_url1,'urls') # Inserto el token en la lista separada
-            line= re.sub(re.escape(res_url1),"",line) #Remuevo
-    
-    if len(results_urls2)>0:
-        #Almaceno en lista separada para urls
-        result = result + results_urls2 # Agrego los tokens a la lista de tokens final
-        for res_url2 in results_urls2:
-          insert_in_list(res_url2,'urls') # Inserto el token en la lista separada
-          line= re.sub(re.escape(res_url2),"",line) #Remuevo 
-    
-    if len(results_urls3)>0:
-        #Almaceno en lista separada para urls
-        result = result + results_urls3 # Agrego los tokens a la lista de tokens final
-        for res_url3 in results_urls3:
-          insert_in_list(res_url3,'urls') # Inserto el token en la lista separada
-          line= re.sub(re.escape(res_url3),"",line) #Remuevo 
+    for regex_d in regex_urls:
+        reg_exp = re.compile(regex_d)
+        results_d = reg_exp.findall(line)
+        if len(results_d)>0:
+            #Almaceno en lista separada para urls
+            result = result + results_d
+            for res_d in results_d:
+                insert_in_list(res_d,'urls') # Inserto el token en la lista separada
+                line= re.sub(re.escape(res_d),"",line) #Remuevo
     
     #Emails
     results_emails = regex_emails.findall(line)
@@ -176,57 +159,24 @@ def proc_alphanum(token,result):
 
 #Procesar Abreviaturas
 def proc_abrev(line,result):
-    global regex_abrev_1
-    global regex_abrev_2
+    global regex_abrevs
 
-    results_abrevs_1 = regex_abrev_1.findall(line)
-    if len(results_abrevs_1)>0:
-        result = result + results_abrevs_1 # Agrego los tokens a la lista de tokens final
-        for res_abrev1 in results_abrevs_1:
-                insert_in_list(res_abrev1,'abreviaturas') # Inserto el token en la lista separada
-                line= re.sub(re.escape(res_abrev1),"",line) #Remuevo lo ya analizado
-
-    results_abrevs_2 = regex_abrev_2.findall(line)
-    if len(results_abrevs_2)>0:
-        result = result + results_abrevs_2 # Agrego los tokens a la lista de tokens final
-        for res_abrev2 in results_abrevs_2:
-                insert_in_list(res_abrev2,'abreviaturas') # Inserto el token en la lista separada
-                line= re.sub(re.escape(res_abrev2),"",line) #Remuevo lo ya analizado
-    
-    results_abrevs_3 = regex_abrev_3.findall(line)
-    if len(results_abrevs_3)>0:
-        result = result + results_abrevs_3 # Agrego los tokens a la lista de tokens final
-        for res_abrev3 in results_abrevs_3:
-                insert_in_list(res_abrev3,'abreviaturas') # Inserto el token en la lista separada
-                line= re.sub(re.escape(res_abrev3),"",line) #Remuevo lo ya analizado
-    
-    results_abrevs_4 = regex_abrev_4.findall(line)
-    if len(results_abrevs_4)>0:
-        result = result + results_abrevs_4 # Agrego los tokens a la lista de tokens final
-        for res_abrev4 in results_abrevs_4:
-                insert_in_list(res_abrev4,'abreviaturas') # Inserto el token en la lista separada
-                line= re.sub(re.escape(res_abrev4),"",line) #Remuevo lo ya analizado
-    
-    results_abrevs_5 = regex_abrev_4.findall(line)
-    if len(results_abrevs_5)>0:
-        result = result + results_abrevs_5 # Agrego los tokens a la lista de tokens final
-        for res_abrev5 in results_abrevs_5:
-                insert_in_list(res_abrev5,'abreviaturas') # Inserto el token en la lista separada
-                line= re.sub(re.escape(res_abrev5),"",line) #Remuevo lo ya analizado
-
+    for regex_d in regex_abrevs:
+        reg_exp = re.compile(regex_d)
+        results_d = reg_exp.findall(line)
+        if len(results_d)>0:
+            result = result + results_d # Agrego los tokens a la lista de tokens final
+            for res_d in results_d:
+                insert_in_list(res_d,'abreviaturas') # Inserto el token en la lista separada
+                line= re.sub(re.escape(res_d),"",line) #Remuevo lo ya analizado
+        
     return line,result
 
 #Procesar Cantidades
 def proc_cantidades(token, result):
-    global regex_tel_1
-    global regex_tel_2
-    global regex_tel_3
-    global regex_ints
-    global regex_floats_point
-    global regex_floats_coma
-    global regex_date_all
+    global regex_cants
 
-    for regex_d in regex_date_all:
+    for regex_d in regex_cants:
       reg_exp = re.compile(regex_d)
       resultado_d = reg_exp.findall(token)
       if len(resultado_d)>0:
@@ -235,52 +185,6 @@ def proc_cantidades(token, result):
                 insert_in_list(res_d,'cantidades')
                 break
             token = '' #Limpio token porque ya se encontró una entidad
-
-
-    # Telefonos
-    resultado_tel1 = regex_tel_1.findall(token)
-    if len(resultado_tel1)>0:
-        result=result+ resultado_tel1
-        for res_tel1 in resultado_tel1:
-            insert_in_list(res_tel1,'cantidades')
-        token = '' #Limpio token porque ya se encontró una entidad
-
-    resultado_tel2 = regex_tel_2.findall(token)
-    if len(resultado_tel2)>0:
-        result=result+ resultado_tel2
-        for res_tel2 in resultado_tel2:
-            insert_in_list(res_tel2,'cantidades')
-        token = '' #Limpio token porque ya se encontró una entidad
-
-    resultado_tel3 = regex_tel_3.findall(token)
-    if len(resultado_tel3)>0:
-        result=result+ resultado_tel3
-        for res_tel3 in resultado_tel3:
-            insert_in_list(res_tel3,'cantidades')
-        token = '' #Limpio token porque ya se encontró una entidad
-
-    #Numero enteros y floats
-    resultado_int = regex_ints.findall(token)
-    if len(resultado_int)>0:
-        result=result+ resultado_int
-        for res_int in resultado_int:
-            insert_in_list(res_int,'cantidades')
-        token = '' #Limpio token porque ya se encontró una entidad
-
-    resultado_float_point = regex_floats_point.findall(token)
-    if len(resultado_float_point)>0:
-        result=result+ resultado_float_point
-        for res_f_point in resultado_float_point:
-            insert_in_list(res_f_point,'cantidades')
-        token = '' #Limpio token porque ya se encontró una entidad
-
-    resultado_float_coma = regex_floats_coma.findall(token)
-    if len(resultado_int)>0:
-        result=result+ resultado_float_coma
-        for res_f_coma in resultado_float_coma:
-            insert_in_list(res_f_coma,'cantidades')
-        token = '' #Limpio token porque ya se encontró una entidad
-        
     return token,result
 
 # Extrae los tokens en una lista
@@ -422,9 +326,7 @@ def main():
                 for line in f:
                     # Tokenizacion
                     tokens_list =  tokenizer(line)
-
                     for token in tokens_list:
-                        
                         token_in_stopwords = token in list_stopwords #Token existe en la list de stopwords?
                         token_long_acept = min_len_tokens<= len(token) <= max_len_tokens #longitud del Token aceptable?
                         if token_long_acept and (not token_in_stopwords):
@@ -434,6 +336,7 @@ def main():
                             term = normalize(token)
                             term_long_acept = (term != '') #Termino aceptable luego de Normalizacion?
                             if term_long_acept:
+                                termsCounter_forfile +=1 # Aumento cantidad de terminos encontrados para este archivo
                                 if term in list_terms: # Si el termino existe en la lista de terminos
 
                                     if file_index in list_terms[term]: # Si el termino ya tiene frecuencia en ese archivo(file_index)
@@ -445,7 +348,6 @@ def main():
                                     list_terms[term]={} # Se inicializa dic del nuevo termino
                                     list_terms[term][file_index] = 1 # Se inicializa la frecuencia del termino en ese archivo(file_index) 
                                     termsCounter+=1 # Aumento cantidad de terminos encontrados
-                                    termsCounter_forfile +=1 # Aumento cantidad de terminos encontrados para este archivo
                                     acum_long_term+= len(term)
             
             # Verificacion y guardado de archivo más corto y más largo.
