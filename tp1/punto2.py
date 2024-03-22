@@ -8,8 +8,8 @@ import re
 from unidecode import unidecode
 
 # vars
-min_len_tokens = 4
-max_len_tokens = 50
+min_len_tokens = 3
+max_len_tokens = 500
 
 # Dic de terminos con frecuencias
 list_terms={}
@@ -27,13 +27,42 @@ top_low_frec=[]
 
 # Expresiones Regulares
 regex_alpha_words = re.compile(r'[^a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ]') # Cadenas alfanumericas
-regex_abrev_1 = re.compile(r'(?:\b[A-Za-z]\.(?:[A-Za-z]\.)*)+') # Abreviaturas como: C.I.A. , N.A.S.A.
-regex_abrev_2 = re.compile(r'(?:^|\s)([A-Za-z]{1,3}\.)(?=\s|\.|$)') # Abreviaturas como: Dir. lic. Lic. Sr. dr.
+regex_abrev_1 = re.compile(r'(?:\b[A-Z]\.)+(?:[A-Z]\.{,1})+') # Abreviaturas como: C.I.A. , N.A.S.A.
+regex_abrev_2 = re.compile(r'(?:^|\s)([A-Za-z]{1,3}\.)(?=\s|\.|$)') # Abreviaturas como: Dir. lic. Lic. Sr.
+regex_abrev_3 = re.compile(r'([A-Z][A-Za-z]\.[A-Z][A-Za-z]\.)+') # # Abreviaturas como: EE.UU.
+regex_abrev_4 = re.compile(r'([A-Za-z]{2}\.[A-Za-z]{2})+') # # Abreviaturas como: ee.UU
+regex_abrev_5 = re.compile(r'\b[a-z]{2,4}\.') # Abreviaturas como: dir. lic. lic. sr. dr.
 
-
-regex_emails = re.compile(r'\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}\b') #Correos electronicos
 
 #Expresiones Regulares - Cantidades y Telefonos
+#Expresiones Regulares - Cantidades y Telefonos
+regex_date_all=[
+    '[0-9]{4}\-[0][1-9]\-[0-3][0-9]', # 2021-09-20
+    '[0-9]{4}\-[1][0-2]\-[0-3][0-9]', # 2021-12-20 
+    '[1][0-2]\-[0-9]{2}\-[0-9]{4}', # 12-20-2021 
+    '[0][1-9]\-[0-9]{2}\-[0-9]{4}', # 09-20-2021
+    '[0-9]{2}\-[1][0-2]\-[0-9]{4}', # dd-mm-aaaa 
+
+    '[0-9]{4}\/[0][1-9]\/[0-3][0-9]', # 2021/09/20
+    '[0-9]{4}\/[1][0-2]\/[0-3][0-9]', # 2021/12/20
+    '[1][0-2]\/[0-9]{2}\/[0-9]{4}', # 12/20/2021
+    '[0][1-9]\/[0-9]{2}\/[0-9]{4}', # 09/20/2021
+    '[0-9]{2}\/[1][0-2]\/[0-9]{4}', # dd/mm/aaaa 
+
+    '[0-9]{4}\.[0][1-9]\.[0-3][0-9]', # 2021.09.20
+    '[0-9]{4}\.[1][0-2]\.[0-3][0-9]', # 2021.12.20
+    '[1][0-2]\.[0-9]{2}\.[0-9]{4}', # 12.20.2021
+    '[0][1-9]\.[0-9]{2}\.[0-9]{4}', # 09.20.2021
+    '[0-9]{2}\.[1][0-2]\.[0-9]{4}', # dd.mm.aaaa 
+]
+
+regex_tel_1 = re.compile(r'^\+\d{10,13}\b') # Coincidir con números de teléfono como: +541122334455
+regex_tel_2 = re.compile(r'^0{0,1}\d{2}-\d{8}\b') # Coincidir con números de teléfono como: 011-22334455 o 11-22334455
+regex_tel_3 = re.compile(r'\b\d{2,3}-\d{2,3}-\d{5,}(?:-\d{3})?\b') # Coincidir con números de teléfono como: 022-333-55555 o 11-22-333-334
+
+regex_ints = re.compile(r'\b-?\d+\b')  # Coincidir con números enteros positivos y negativos
+regex_floats_point = re.compile(r'-?\b\d+\.\d+\b')  # Coincidir con números reales con punto positivos y negativos
+regex_floats_coma = re.compile(r'-?\b\d+,\d+\b')  # Coincidir con números reales con coma positivos y negativos
 regex_tel_1 = re.compile(r'^\+\d{10,13}\b') # Coincidir con números de teléfono como: +541122334455
 regex_tel_2 = re.compile(r'^0{0,1}\d{2}-\d{8}\b') # Coincidir con números de teléfono como: 011-22334455 o 11-22334455
 regex_tel_3 = re.compile(r'\b\d{2,3}-\d{2,3}-\d{5,}(?:-\d{3})?\b') # Coincidir con números de teléfono como: 022-333-55555 o 11-22-333-334
@@ -46,10 +75,13 @@ regex_floats_coma = re.compile(r'-?\b\d+,\d+\b')  # Coincidir con números reale
 # Expresiones Regulares- URLs
 regex_url_1 = re.compile(r'http[s]?://(?:[A-Za-z]|[0-9]|[+_@$-.&]|[*,!/:?=#\(\)])+') # URLs como: http o https
 regex_url_2 = re.compile(r'^www\.[A-Za-z0-9_-]+(?:\.[A-Za-z]{2,})+$') # URL como: www. ejemplo.com.ar 
+regex_url_3 = re.compile(r'ftp://(?:[A-Za-z]|[0-9]|[+_@$-.&]|[*,!/:?=#\(\)])+') # URL como: ftp://unlu.edu.ar
+
+regex_emails = re.compile(r'\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}\b') #Correos electronicos
 
 
 # Expresiones Regulares- Nombre Propios
-regex_nombres_propios = re.compile(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+\b') 
+regex_nombres_propios = re.compile(r'\b[A-Z][a-z]+\b(?:\s[A-Z][a-z]+)*') 
 
 
 # Obtiene los stopwords de un archivo y los devuelven en un array.
@@ -85,50 +117,50 @@ def proc_nombres_propios(line,result):
 
         for element in nombres_propios:
             insert_in_list(element,'nombres_propios') # Inserto el token en la lista separada
-            line= re.sub(re.escape(element)," ",line) #Remuevo Nombre Propio ya analizado
+            line= re.sub(re.escape(element),"",line) #Remuevo Nombre Propio ya analizado
     return line, result
 
 #Proceso URLs y emails
-def proc_urls_emails(initial_list_split,result):
+#Proceso URLs y emails
+def proc_urls_emails(line,result):
     global regex_url_1
     global regex_url_2
     global regex_emails
 
-    # Analisis de URL
-    for token in initial_list_split:
+    results_urls1 = regex_url_1.findall(line)
+    results_urls2 = regex_url_2.findall(line)
+    results_urls3 = regex_url_3.findall(line)
 
-        results_urls1 = regex_url_1.findall(token)
-        results_urls2 = regex_url_2.findall(token)
+    if len(results_urls1)>0:
+        #Almaceno en lista separada para urls
+        result = result + results_urls1
+        for res_url1 in results_urls1:
+            insert_in_list(res_url1,'urls') # Inserto el token en la lista separada
+            line= re.sub(re.escape(res_url1),"",line) #Remuevo
+    
+    if len(results_urls2)>0:
+        #Almaceno en lista separada para urls
+        result = result + results_urls2 # Agrego los tokens a la lista de tokens final
+        for res_url2 in results_urls2:
+          insert_in_list(res_url2,'urls') # Inserto el token en la lista separada
+          line= re.sub(re.escape(res_url2),"",line) #Remuevo 
+    
+    if len(results_urls3)>0:
+        #Almaceno en lista separada para urls
+        result = result + results_urls3 # Agrego los tokens a la lista de tokens final
+        for res_url3 in results_urls3:
+          insert_in_list(res_url3,'urls') # Inserto el token en la lista separada
+          line= re.sub(re.escape(res_url3),"",line) #Remuevo 
+    
+    #Emails
+    results_emails = regex_emails.findall(line)
+    if len(results_emails)>0:
+        result = result + results_emails # Agrego los tokens a la lista de tokens final
+        for res_email in results_emails:
+          insert_in_list(res_email,'emails') # Inserto el token en la lista separada
+          line= re.sub(re.escape(res_email),"",line) #Remuevo 
 
-        if len(results_urls1)>0:
-            #Almaceno en lista separada para urls
-            result = result + results_urls1
-            for res_url1 in results_urls1:
-                insert_in_list(res_url1,'urls') # Inserto el token en la lista separada
-                url_divided_tokens = re.sub("[./#-?=&_:]", " ", res_url1) # Divide el string URL con espacios
-                initial_list_split = initial_list_split + url_divided_tokens.split() # Agrega cada elemento del string URL en la lista inicial
-            
-            initial_list_split.remove(token) #Remuevo token ya analizado
-        
-        if len(results_urls2)>0:
-            #Almaceno en lista separada para urls
-            result = result + results_urls2 # Agrego los tokens a la lista de tokens final
-            for res_url2 in results_urls2:
-                insert_in_list(res_url2,'urls') # Inserto el token en la lista separada
-                url_divided_tokens = re.sub("[./#-?=&_:]", " ", res_url2) # Divide el string URL con espacios
-                initial_list_split = initial_list_split + url_divided_tokens.split() # Agrega cada elemento del string URL en la lista inicial
-            initial_list_split.remove(token) #Remuevo la url ya analizada
-        
-        #Emails
-        results_emails = regex_emails.findall(token)
-        if len(results_emails)>0:
-            result = result + results_emails # Agrego los tokens a la lista de tokens final
-            for res_email in results_emails:
-                insert_in_list(res_email,'emails') # Inserto el token en la lista separada
-            
-            initial_list_split.remove(token) #Remuevo token ya analizado
-
-    return initial_list_split, result
+    return line, result
 
 
 #Procear URLs y emails
@@ -143,23 +175,46 @@ def proc_alphanum(token,result):
     return result
 
 #Procesar Abreviaturas
-def proc_abrev(token,result):
+def proc_abrev(line,result):
     global regex_abrev_1
     global regex_abrev_2
 
-    results_abrevs_1 = regex_abrev_1.findall(token)
+    results_abrevs_1 = regex_abrev_1.findall(line)
     if len(results_abrevs_1)>0:
         result = result + results_abrevs_1 # Agrego los tokens a la lista de tokens final
         for res_abrev1 in results_abrevs_1:
                 insert_in_list(res_abrev1,'abreviaturas') # Inserto el token en la lista separada
+                line= re.sub(re.escape(res_abrev1),"",line) #Remuevo lo ya analizado
 
-    results_abrevs_2 = regex_abrev_2.findall(token)
+    results_abrevs_2 = regex_abrev_2.findall(line)
     if len(results_abrevs_2)>0:
         result = result + results_abrevs_2 # Agrego los tokens a la lista de tokens final
         for res_abrev2 in results_abrevs_2:
                 insert_in_list(res_abrev2,'abreviaturas') # Inserto el token en la lista separada
+                line= re.sub(re.escape(res_abrev2),"",line) #Remuevo lo ya analizado
+    
+    results_abrevs_3 = regex_abrev_3.findall(line)
+    if len(results_abrevs_3)>0:
+        result = result + results_abrevs_3 # Agrego los tokens a la lista de tokens final
+        for res_abrev3 in results_abrevs_3:
+                insert_in_list(res_abrev3,'abreviaturas') # Inserto el token en la lista separada
+                line= re.sub(re.escape(res_abrev3),"",line) #Remuevo lo ya analizado
+    
+    results_abrevs_4 = regex_abrev_4.findall(line)
+    if len(results_abrevs_4)>0:
+        result = result + results_abrevs_4 # Agrego los tokens a la lista de tokens final
+        for res_abrev4 in results_abrevs_4:
+                insert_in_list(res_abrev4,'abreviaturas') # Inserto el token en la lista separada
+                line= re.sub(re.escape(res_abrev4),"",line) #Remuevo lo ya analizado
+    
+    results_abrevs_5 = regex_abrev_4.findall(line)
+    if len(results_abrevs_5)>0:
+        result = result + results_abrevs_5 # Agrego los tokens a la lista de tokens final
+        for res_abrev5 in results_abrevs_5:
+                insert_in_list(res_abrev5,'abreviaturas') # Inserto el token en la lista separada
+                line= re.sub(re.escape(res_abrev5),"",line) #Remuevo lo ya analizado
 
-    return result
+    return line,result
 
 #Procesar Cantidades
 def proc_cantidades(token, result):
@@ -169,6 +224,18 @@ def proc_cantidades(token, result):
     global regex_ints
     global regex_floats_point
     global regex_floats_coma
+    global regex_date_all
+
+    for regex_d in regex_date_all:
+      reg_exp = re.compile(regex_d)
+      resultado_d = reg_exp.findall(token)
+      if len(resultado_d)>0:
+            result=result+ resultado_d
+            for res_d in resultado_d:
+                insert_in_list(res_d,'cantidades')
+                break
+            token = '' #Limpio token porque ya se encontró una entidad
+
 
     # Telefonos
     resultado_tel1 = regex_tel_1.findall(token)
@@ -198,44 +265,47 @@ def proc_cantidades(token, result):
         result=result+ resultado_int
         for res_int in resultado_int:
             insert_in_list(res_int,'cantidades')
+        token = '' #Limpio token porque ya se encontró una entidad
 
     resultado_float_point = regex_floats_point.findall(token)
     if len(resultado_float_point)>0:
         result=result+ resultado_float_point
         for res_f_point in resultado_float_point:
             insert_in_list(res_f_point,'cantidades')
+        token = '' #Limpio token porque ya se encontró una entidad
 
     resultado_float_coma = regex_floats_coma.findall(token)
     if len(resultado_int)>0:
         result=result+ resultado_float_coma
         for res_f_coma in resultado_float_coma:
             insert_in_list(res_f_coma,'cantidades')
+        token = '' #Limpio token porque ya se encontró una entidad
         
-    return result
+    return token,result
 
 # Extrae los tokens en una lista
 def tokenizer(line):
     result = []
+    
+    #Proceso las URL y email
+    line,result = proc_urls_emails(line,result)
+
+    #Proceso Abreviaturas
+    line,result = proc_abrev(line,result)
+
     # Proceso los nombres propios
     line,result = proc_nombres_propios(line,result)
 
-    # Genero lista de tokens sin los nombre propios
+    # Genero lista de tokens
     initial_list_split = line.split() 
-    
-    #Proceso las URL y email
-    initial_list_split,result = proc_urls_emails(initial_list_split,result)
-        
+
     # Analisis otros patrones, se agregan los tokens a la lista final y luego se quitan para la revisión de los siguientes patrones
     for token in initial_list_split:
-        
+        #Proceso Cantidad (Numero y telefonos)
+        token, result = proc_cantidades(token,result)
+
         #Procesa alphanumericos
         result = proc_alphanum(token,result)
-
-        #Proceso Abreviaturas
-        result = proc_abrev(token,result)
-
-        #Proceso Cantidad (Numero y telefonos)
-        result = proc_cantidades(token,result)
 
     return result
 
@@ -348,7 +418,7 @@ def main():
             filepath = join(dirname, filename)
             print(f"Procesando Archivo: {filepath}")
             # Se procesa cada linea del archivo
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, 'r', encoding='iso-8859-1') as f:
                 for line in f:
                     # Tokenizacion
                     tokens_list =  tokenizer(line)
