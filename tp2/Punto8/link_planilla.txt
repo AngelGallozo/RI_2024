@@ -1,1 +1,2 @@
+En caso de errores de compatibilidad entre Google Sheets y Libre Office/Excel, dejo el link:
 https://docs.google.com/spreadsheets/d/1hzs9kWcuBHY649lVYucWmfGZFFTDct7oMi6KG1t3uH4/edit?usp=sharing
