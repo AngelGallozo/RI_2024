@@ -19,19 +19,24 @@ def main():
         archivo_two = open(file_two,'r',encoding='iso-8859-1')
         lineas_archivo_two = archivo_two.readlines()
         archivo_two.close()
-        
+
         if len(lineas_archivo_one) != len(lineas_archivo_two):
             print("ERROR!!!! : Los archivos no tienen la misma cantidad de lineas.")
         else:
             indice = 0
+            diferencias=0
             for line in lineas_archivo_one:
                 num_line_one,lang_one = line.split()
                 num_line_two,lang_two = lineas_archivo_two[indice].split()
+
                 if(lang_one != lang_two):
                     print("Oracion: ["+str(indice+1)+"] Lang_1: "+lang_one+" Lang_2: "+lang_two)
+                    diferencias+=1
                 
                 indice += 1
-             
+            
+            print(f'Cantidad de Diferencias: {diferencias}')
+            print(f'De un total de {indice} casos un {round(diferencias/indice*100,2)}% tuvo clasificacion diferente.')
                 
 if __name__ == '__main__':
     main()
