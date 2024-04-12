@@ -129,7 +129,6 @@ def main():
         sys.exit(0)
     dirname = sys.argv[1]
     use_stopwords = True if sys.argv[2].lower() == 'y' else False
-    stopwords_file = sys.argv[3]
     tokensCounter = 0 #Contador de tokens
     termsCounter = 0 #Contador de terminos
     file_index = 0 # Identifica a cada archivo con id incremental (ademas, sirve para tener la cantidad de archivos total)
@@ -137,13 +136,15 @@ def main():
     # Obteniendo Stopwords
     if (isdir(dirname)):
         list_stopwords =[]
-        #Valido uso de Stopwords
         if use_stopwords:
+            stopwords_file = sys.argv[3]
+            list_stopwords =[]
+            #Valido uso de Stopwords
             if len(sys.argv) < 4: 
                 print('Es necesario el nombre_archivo_stopwords')
                 sys.exit(0)
             # Recuperos los stopwords del archivo
-            list_stopwords = getStopWords(sys.argv[3])    
+            list_stopwords = getStopWords(stopwords_file)    
     
     if (isdir(dirname)):
         # Se procesa cada archivo del directorio
