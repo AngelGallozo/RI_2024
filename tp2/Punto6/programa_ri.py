@@ -9,14 +9,19 @@ motor_ri = MotorRI()
 # Mostrar los ranking de documentos
 def almacenar_ranking(rank):
     
-    arch_terms_salida = open("ranking.txt", "x",encoding='utf-8')
-    for item in rank:
-        arch_terms_salida.write(str(item[0])+" "+str(item[1])+" "+item[2]+"\n")
-    arch_terms_salida.close()    
-    print("\n\n--------------------------------------------------------")
-    print("(*)Arhicvo Ranking creado.\n")
-    print("(?)Estructura:id_doc - Score - Path")
-    print("--------------------------------------------------------")
+    if len(rank)>0:
+        arch_terms_salida = open("ranking.txt", "x",encoding='utf-8')
+        for item in rank:
+            arch_terms_salida.write(str(item[0])+" "+str(item[1])+" "+item[2]+"\n")
+        arch_terms_salida.close()    
+        print("\n\n--------------------------------------------------------")
+        print("(*)Archivo Ranking creado.\n")
+        print("(?)Estructura:id_doc - Score - Path")
+        print("--------------------------------------------------------")
+    else:
+        print("\n\n--------------------------------------------------------")
+        print("(!)Terminos Inexistentes en la Coleccion.\n")
+        print("--------------------------------------------------------")
 
 def indexar_documentos():
     print("\n\n--------------------------------------------------------")
@@ -42,7 +47,7 @@ def main():
     opcion = ""
     while (opcion!="3"):
         print("\n\n------------------------------")
-        print("Programa RI - 2023")
+        print("Programa RI - 2024")
         print("------------------------------")
         print("1)_Indexar documentos")
         print("2)_Realizar Query")

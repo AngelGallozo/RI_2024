@@ -88,7 +88,8 @@ class MotorRI:
         self.cant_docs = file_index-1
         return self.list_terms
 
-    
+    def clean_terms(self,query_terms):
+        return {k: v for k, v in query_terms.items() if k in self.list_terms}
     
     # Procesamiento de la query
     def procesar_query(self,query):
@@ -100,6 +101,9 @@ class MotorRI:
         
         # Indexacion de los terminos de la query
         self.indexado(query,query_terms)
+        
+        # Elimino los terminos que no esten en la coleccion
+        query_terms = self.clean_terms(query_terms)
         
         # Obteniendo los idfs de cada termino de la coleccion
         query_terms_idf = self.obtener_idfs(query_terms)
