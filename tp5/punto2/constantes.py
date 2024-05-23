@@ -1,0 +1,5 @@
+LIMIT_SEEDS = 20
+LIMIT_PAGES = 50
+LIMIT_DEPTH_LOGIC = 3
+LIMIT_DEPTH_PHYSICAL = 3
+URL_SEEDS = "https://trends.netcraft.com/topsites"
