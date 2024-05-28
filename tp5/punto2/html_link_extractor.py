@@ -15,8 +15,8 @@ class HTMLLinkExtractor():
     def is_absolute_href(self, href):
         return bool(urlparse(href).netloc) # Si existe valor si es path absoluto
 
-    def extract_links(self, url):
-        
+    def extract_links(self, url,limit=None):
+        count_urls = 0
         html_file = requests.get(url,headers={'User-agent':'Mozilla/5.0'})
         parsed_uri = urlparse(url)
         host = '{uri.scheme}://{uri.netloc}'.format(uri=parsed_uri)
@@ -29,4 +29,10 @@ class HTMLLinkExtractor():
                     links.append(href)
                 else:
                     links.append(host+href)
+                
+                if limit!= None and count_urls > limit:
+                    break
+                
+                count_urls +=1
+    
         return links
