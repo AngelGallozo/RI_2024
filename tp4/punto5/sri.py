@@ -17,7 +17,7 @@ class SRI:
     inverted_index={}
 
     def __init__(self):
-        pass
+        self.retriev_index()
     
 
     def load_vocabulary(self):
@@ -321,6 +321,8 @@ class SRI:
     def get_skiplist(self,token):
         term_skiplist=[]
         if os.path.exists(PATH_POSTINGLIST):
+            docids_skiplist=[]
+            bytes_skiplist=[]
             if len(self.vocabulary)==0:
                 self.load_vocabulary() # Cargarmos la tabla de postingslists
 

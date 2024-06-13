@@ -50,7 +50,6 @@ def menu_get_postlits():
             return None
 
 def main():
-    sist_ri.retriev_index()
     menu_get_postlits()
 
 if __name__ == '__main__':
